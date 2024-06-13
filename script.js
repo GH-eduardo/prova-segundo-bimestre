@@ -113,7 +113,13 @@ function carregarNoticias() {
                 })
                 li.appendChild(button)
 
-                document.querySelector('#listaDeNoticias').appendChild(li)
+                let lista = document.querySelector('#listaDeNoticias')
+                if (lista == null) {
+                    lista = document.createElement('ul')
+                    lista.id = 'listaDeNoticias'
+                    document.querySelector('main').appendChild(lista)
+                }
+                lista.appendChild(li)
             })
         })
         .catch(error => console.error('Erro:', error));
@@ -121,31 +127,82 @@ function carregarNoticias() {
 
 function calcularDiferenca(dataPublicacao) {
 
+    let dataRecebida = dataPublicacao
+
     let dataAtual = new Date()
-    let dataPublicacaoFormatada = new Date(dataPublicacao)
-    let diferenca = dataAtual - dataPublicacaoFormatada
-    let dias = Math.floor(diferenca / (1000 * 60 * 60 * 24))
+    let partes = dataRecebida.split(/[/ :]/);
+    dataRecebida = new Date(partes[2], partes[1]-1, partes[0], partes[3], partes[4], partes[5]);
+    dataRecebida = new Date(dataRecebida)
+    let diferenca = dataAtual - dataRecebida
+    let dias = Math.floor(diferenca / (1000 * 60 * 60 * 24)) // um dia em milisegundos
 
     dias = Math.abs(dias)
+    anos = Math.floor(dias/365)
+    meses = Math.floor(dias%365/30)
 
-    if (dias == 0) {
-        dias = 'ontem'
+    let stringDiferenca = ''
+
+    if (anos >= 1) { // faz mais de 1 ano
+        if (anos >= 2) {
+            stringDiferenca = 'há ' + anos + ' anos'
+        }
+        else {
+            stringDiferenca = 'há 1 ano'
+        }
+        if (meses >= 1) {
+            if (meses >= 2) {
+                stringDiferenca += ' e ' + meses + ' meses'
+            }
+            else {
+                stringDiferenca += ' e 1 mês'
+            }
+        }
     }
-    else if (dias == 0) {
-        dias = 'hoje'
+    else if (meses >= 1) { // faz mais de 1 mês
+        if (meses >= 2) {
+            stringDiferenca = 'há ' + meses + ' meses'
+        }
+        else {
+            stringDiferenca = 'há 1 mês'
+        }
+
+        if (dias%365%30 >= 1) { // se não estiver em um 'mêsversário' mostra também os dias
+            if (dias%365%30 >= 2) {
+                stringDiferenca += ' e ' + (dias%365%30) + ' dias'
+            }
+            else {
+                stringDiferenca += ' e 1 dia'
+            }
+        }
     }
-    else {
-        dias = 'há ' + dias + ' dias'
+    else { // faz menos de 1 mês
+        if (dias >= 1) {
+            if (dias >= 3) {
+                stringDiferenca += 'há ' + dias + ' dias'
+            }
+            else if (dias == 2) {
+                stringDiferenca += 'anteontem'
+            }
+            else {
+                stringDiferenca += 'ontem'
+            }
+        }
+        else {
+            stringDiferenca += 'hoje'
+        }
     }
 
-    return dias
+    return stringDiferenca
 }
 
 function adicionarPaginacao(pagina) {
     let ul = document.querySelector('#paginacao')
-    const paginaAtual = document.querySelector('#paginaAtual')
-    let paginaAtualInt = parseInt(paginaAtual.innerText)
-    console.log(pagina, pagina, pagina, pagina)
+
+    if (ul == null) {
+        ul = document.createElement('ul')
+        ul.id = 'paginacao'
+        document.querySelector('footer').appendChild(ul)
+    }
 
     let aux = pagina - 5 //
     if (aux < 1) {
@@ -154,8 +211,12 @@ function adicionarPaginacao(pagina) {
 
     let li = document.createElement('li')
     let a = document.createElement('a')
-    if (paginaAtualInt != 1) {
-        a.addEventListener('click', () => carregarNoticias(paginaAtualInt - 1))
+    if (pagina != 1) {
+        a.addEventListener('click', () => {
+            document.querySelector('ul').remove()
+            document.querySelector('ul').remove()
+            atualizarFiltros(pagina - 1)
+        })
     }
     a.innerText = '<'
     li.appendChild(a)
@@ -166,12 +227,20 @@ function adicionarPaginacao(pagina) {
         a = document.createElement('a')
         a.innerText = aux
         if (a.innerText == pagina) {
-            document.querySelector('#paginaAtual').remove()
+            let paginaAtual = document.querySelector('#paginaAtual')
+            if(paginaAtual != null){
+                paginaAtual.remove()
+            }
             a.id = 'paginaAtual'
         }
         aux++
-        if (a.innerText != paginaAtual.innerText) {
-            a.addEventListener('click', () => carregarNoticias(a.innerText))
+        if (a.innerText != pagina) {
+            let valorDoMomento = a.innerText
+            a.addEventListener('click', () => {
+                document.querySelector('ul').remove()
+                document.querySelector('ul').remove()
+                atualizarFiltros(valorDoMomento)
+            })
         }
         li.appendChild(a)
         ul.appendChild(li)
@@ -182,7 +251,7 @@ function adicionarPaginacao(pagina) {
     a.addEventListener('click', () => {
         document.querySelector('ul').remove()
         document.querySelector('ul').remove()
-        atualizarFiltros(paginaAtualInt + 1)
+        atualizarFiltros(pagina + 1)
     }) 
     a.innerText = '>'
     li.appendChild(a)

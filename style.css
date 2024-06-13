@@ -56,9 +56,6 @@ header button {
     color: white;
 }
 
-#filtroBotao {
-}
-
 main {
     background-color: #f0f0f0;
     height: 100%;
@@ -83,9 +80,6 @@ li {
     margin: 60px 0;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-h2 {
 }
 
 h2, p {
@@ -129,9 +123,6 @@ footer ul {
     padding: 20px;
     display: flex;
     justify-content: center;
-}
-
-footer li {
 }
 
 footer a {
