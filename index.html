@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prova Sugundo Bimestre</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+    <header>
+        <form action="" id="formulárioDeBusca">
+            <input type="text" value="" id="barraDePesquisa">
+            <button type="submit">🔍</button>
+        </form>
+        <div id="filtro">
+            <svg id="filtroBotao" width="20" height="20" fill="#f0f0f0" viewBox="0 0 80 90" focusable="false"
+                xmlns="http://www.w3.org/2000/svg" onclick="openDialog()">
+                <path d="m 0,0 30,45 0,30 10,15 0,-45 30,-45 Z"></path>
+            </svg>
+            <span id="spanFiltro">(0)</span>
+        </div>
+    </header>
+
+    <main>
+
+        <dialog id="dialog">
+            <form method="dialog">
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" id="tipo">
+                    <option value="">ambos</option>
+                    <option value="noticia">apenas notícias</option>
+                    <option value="release">apenas releases</option>
+                </select>
+
+                <label for="qtd">Quantidade:</label>
+                <select name="quantidade" id="qtd">
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                </select>
+
+                <label for="de">De:</label>
+                <input type="date" id="de" name="de">
+
+                <label for="até">Até:</label>
+                <input type="date" id="até" name="até">
+
+                <button type="submit" id="applyFiltersButton" onclick="atualizarFiltros()">Aplicar filtros</button>
+                <button type="reset">Limpar filtros</button>
+            </form>
+            <button id="closeButton" onclick="closeDialog()">X</button>
+        </dialog>
+
+        <ul id="listaDeNoticias">
+        </ul>
+
+    </main>
+
+    <footer>
+        <ul id="paginacao">
+        </ul>
+        <a href="" id="paginaAtual">1</a>
+    </footer>
+    <script>
+        atualizarFiltros('')
+        // carregarNoticias()
+    </script>
+</body>
+
+</html>

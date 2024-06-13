@@ -1,0 +1,154 @@
+/* Reset de estilos para garantir consistência em diferentes navegadores */
+body,
+h1,
+h2,
+p,
+ul,
+ol,
+li,
+figure,
+table,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    display: grid;
+    grid-template-rows: 1fr auto 1fr;
+}
+
+header {
+    height: 100%;
+    width: 100%;
+    background-color: #4682b4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header form {
+    position: relative;
+    width: 25%;
+    height: 40px;
+}
+
+header input {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+header button {
+    position: absolute;
+    top: 10px;
+    right: 2%;
+}
+
+#filtro {
+    position: absolute;
+    right: 25%;
+    color: white;
+}
+
+#filtroBotao {
+}
+
+main {
+    background-color: #f0f0f0;
+    height: 100%;
+    width: 100%;
+    max-width: 100ch;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+img {
+    width: 400px;
+}
+
+#listaDeNoticias {
+    list-style-type: none;
+}
+
+li {
+    display: flex;
+    margin: 60px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+h2 {
+}
+
+h2, p {
+    text-indent: 3em;
+    text-align: center;
+    display: block;
+    width: 100%;
+}
+
+#dialog {
+    padding: 35px;
+}
+
+#dialog input, select {
+    display: block;
+    margin-bottom: 10px;
+}
+
+#applyFiltersButton {
+    margin-top: 30px;
+    color: white;
+    background-color: #4682b4;
+}
+
+#closeButton {
+    color: red;
+    position: absolute;
+    top: 2px;
+    right: 1px;
+}
+
+button, svg {
+    cursor: pointer;
+}
+
+footer {
+    background-color: #4682b4;
+}
+
+footer ul {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+footer li {
+}
+
+footer a {
+    width: 40px;
+    height: 40px;
+    background-color: whitesmoke;
+    border: black 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#paginaAtual {
+    background-color: #4682b4;
+}
+
+footer a:hover, #paginaAtual:hover {
+    background-color: gold;
+}
