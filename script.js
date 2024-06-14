@@ -63,7 +63,7 @@ function atualizarFiltros(pagina) {
     if (pagina != '') {
         url.searchParams.set('page', pagina)
     }
-    document.querySelector('#spanFiltro').textContent = `(${cont})`
+    document.querySelector('#spanFiltro').textContent = `${cont}`
     window.history.pushState({}, '', url);
 
     carregarNoticias()
@@ -90,34 +90,41 @@ function carregarNoticias() {
             data.items.forEach(item => {
                 let li = document.createElement('li')
                 li.id = item.id
-                let h2 = document.createElement('h2')
-                h2.innerText = item.titulo
-                li.appendChild(h2)
+
                 let img = document.createElement('img')
                 let imagens = JSON.parse(item.imagens)
                 img.src = 'https://agenciadenoticias.ibge.gov.br/' + imagens.image_intro
                 li.appendChild(img)
+
+                let div = document.createElement('div')
+                div.classList.add('divConteúdo')
+                let h2 = document.createElement('h2')
+                h2.innerText = item.titulo
+                div.appendChild(h2)
                 let p = document.createElement('p')
                 p.innerText = item.introducao
-                li.appendChild(p)
+                div.appendChild(p)
                 p = document.createElement('p')
                 p.innerText = '#' + item.editorias
-                li.appendChild(p)
-                p = document.createElement('p')
-                p.innerText = 'Publicado ' + calcularDiferenca(item.data_publicacao)
-                li.appendChild(p)
+                let span = document.createElement('span')
+                span.innerText = 'Publicado ' + calcularDiferenca(item.data_publicacao)
+                span.classList.add('data')
+                p.appendChild(span)
+                div.appendChild(p)
                 let button = document.createElement('button')
                 button.innerText = 'Leia mais'
                 button.addEventListener('click', function () {
                     window.open(item.link, '_blank')
                 })
-                li.appendChild(button)
+                div.appendChild(button)
+
+                li.appendChild(div)
 
                 let lista = document.querySelector('#listaDeNoticias')
                 if (lista == null) {
                     lista = document.createElement('ul')
                     lista.id = 'listaDeNoticias'
-                    document.querySelector('main').appendChild(lista)
+                    document.querySelector('#conteúdo').appendChild(lista)
                 }
                 lista.appendChild(li)
             })
