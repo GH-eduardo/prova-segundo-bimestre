@@ -10,11 +10,12 @@
 </head>
 
 <body>
+
     <header>
         <h1>Portal de Notícias do Ibge</h1>
-        <form action="" id="formulárioDeBusca">
-            <input type="text" value="IBGE" id="barraDePesquisa" placeholder="buscar notícia por termo">
-            <button type="submit">🔍</button>
+        <form action="" id="formulárioDeBusca" onsubmit="event.preventDefault(); atualizarFiltros('')">
+            <input type="text" value="" id="barraDePesquisa" placeholder="buscar notícia por termo">
+            <button type="submit" id="lupa">🔍</button>
         </form>
         <div id="filtro">
             <svg id="filtroBotao" width="20" height="20" fill="#f0f0f0" viewBox="0 0 80 90" focusable="false"
@@ -27,51 +28,59 @@
 
     <main>
 
-        <div id="conteúdo">
-            <dialog id="dialog">
-                <form method="dialog">
+        <dialog id="dialog">
+            <form method="dialog">
+
+                <div class="divDialog">
                     <label for="tipo">Tipo:</label>
-                    <select name="tipo" id="tipo">
-                        <option value="">ambos</option>
-                        <option value="noticia">apenas notícias</option>
-                        <option value="release">apenas releases</option>
+                    <select name="tipo" id="tipo" class="filtros">
+                        <option value="">Selecione</option>
+                        <option value="noticia">Notícia</option>
+                        <option value="release">Release</option>
                     </select>
 
                     <label for="qtd">Quantidade:</label>
-                    <select name="quantidade" id="qtd">
+                    <select name="quantidade" id="qtd" class="filtros">
                         <option value="10">10</option>
                         <option value="15">15</option>
                         <option value="20">20</option>
                         <option value="25">25</option>
                         <option value="30">30</option>
                     </select>
+                </div>
 
+                <div class="divDialog">
                     <label for="de">De:</label>
-                    <input type="date" id="de" name="de">
+                    <input type="date" id="de" name="de" class="filtros">
 
                     <label for="até">Até:</label>
-                    <input type="date" id="até" name="até">
+                    <input type="date" id="até" name="até" class="filtros">
+                </div>
 
-                    <button type="submit" id="applyFiltersButton" onclick="atualizarFiltros()">Aplicar filtros</button>
-                    <button type="reset">Limpar filtros</button>
-                </form>
-                <button id="closeButton" onclick="closeDialog()">X</button>
-            </dialog>
+                <button type="submit" id="applyFiltersButton" onclick="atualizarFiltros('')" class="filtros">Aplicar</button>
+                <button type="reset" id="resetFiltersButton" class="filtros">Limpar filtros</button>
+            </form>
+            <button id="closeButton" onclick="closeDialog()">X</button>
+        </dialog>
 
+        <div id="conteúdo">
             <ul id="listaDeNoticias">
             </ul>
+        </div>
+
+        <div id="paginacao">
+            <ul id="listaDePaginas">
+            </ul>
+            <a href="" id="paginaAtual">1</a>
         </div>
 
     </main>
 
     <footer>
-        <ul id="paginacao">
-        </ul>
-        <a href="" id="paginaAtual">1</a>
+        <p>&copy; Prova do segundo bimestre - Programação WEB | Eduardo Thomé | RA: 22110037-2</p>
     </footer>
     <script>
         atualizarFiltros('')
-        // carregarNoticias()
     </script>
 </body>
 

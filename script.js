@@ -22,19 +22,23 @@ function formatarData(data) {
         mes = '0' + mes
     }
 
-    let dataFormatada = dia + '-' + mes + '-' + ano
+    let dataFormatada = mes + '-' + dia + '-' + ano
     return dataFormatada
 }
 
 function atualizarFiltros(pagina) {
+    removerListas()
+
     let cont = 0
 
     let tipo = document.querySelector('#tipo')
     let qtd = document.querySelector('#qtd')
     let de = document.querySelector('#de')
     let ate = document.querySelector('#até')
+    let busca = document.querySelector('#barraDePesquisa')
 
     const url = new URL(window.location)
+    url.searchParams.delete('busca');
     url.searchParams.delete('tipo');
     url.searchParams.delete('de');
     url.searchParams.delete('ate');
@@ -63,6 +67,9 @@ function atualizarFiltros(pagina) {
     if (pagina != '') {
         url.searchParams.set('page', pagina)
     }
+    if (busca.value != '') {
+        url.searchParams.set('busca', busca.value)
+    }
     document.querySelector('#spanFiltro').textContent = `${cont}`
     window.history.pushState({}, '', url);
 
@@ -73,7 +80,7 @@ function carregarNoticias() {
 
     const url = new URL(window.location)
     let queryString = url.search
-    console.log(queryString)
+    console.log(queryString, queryString)
     let link = 'http://servicodados.ibge.gov.br/api/v3/noticias/'
 
     fetch(link + queryString)
@@ -86,7 +93,7 @@ function carregarNoticias() {
         .then(data => {
             console.log('Página do retorno do fetch: ' + data.page)
             console.log(data)
-            adicionarPaginacao(data.page)
+            adicionarPaginacao(data.page, data.totalPages)
             data.items.forEach(item => {
                 let li = document.createElement('li')
                 li.id = item.id
@@ -97,22 +104,26 @@ function carregarNoticias() {
                 li.appendChild(img)
 
                 let div = document.createElement('div')
-                div.classList.add('divConteúdo')
                 let h2 = document.createElement('h2')
                 h2.innerText = item.titulo
                 div.appendChild(h2)
                 let p = document.createElement('p')
+                p.classList.add('introducao')
                 p.innerText = item.introducao
                 div.appendChild(p)
+                let divInfoAdicional = document.createElement('div')
                 p = document.createElement('p')
                 p.innerText = '#' + item.editorias
-                let span = document.createElement('span')
-                span.innerText = 'Publicado ' + calcularDiferenca(item.data_publicacao)
-                span.classList.add('data')
-                p.appendChild(span)
-                div.appendChild(p)
+                divInfoAdicional.appendChild(p)
+                p = document.createElement('p')
+                p.innerText = 'Publicado ' + calcularDiferenca(item.data_publicacao)
+                p.classList.add('data')
+                divInfoAdicional.appendChild(p)
+                divInfoAdicional.classList.add('infoAdicional')
+                div.appendChild(divInfoAdicional)
                 let button = document.createElement('button')
                 button.innerText = 'Leia mais'
+                button.classList.add('botaoLeiaMais')
                 button.addEventListener('click', function () {
                     window.open(item.link, '_blank')
                 })
@@ -127,6 +138,8 @@ function carregarNoticias() {
                     document.querySelector('#conteúdo').appendChild(lista)
                 }
                 lista.appendChild(li)
+                let hr = document.createElement('hr')
+                lista.appendChild(hr)
             })
         })
         .catch(error => console.error('Erro:', error));
@@ -134,12 +147,8 @@ function carregarNoticias() {
 
 function calcularDiferenca(dataPublicacao) {
 
-    let dataRecebida = dataPublicacao
-
+    let dataRecebida = new Date(dataPublicacao)
     let dataAtual = new Date()
-    let partes = dataRecebida.split(/[/ :]/);
-    dataRecebida = new Date(partes[2], partes[1]-1, partes[0], partes[3], partes[4], partes[5]);
-    dataRecebida = new Date(dataRecebida)
     let diferenca = dataAtual - dataRecebida
     let dias = Math.floor(diferenca / (1000 * 60 * 60 * 24)) // um dia em milisegundos
 
@@ -202,13 +211,13 @@ function calcularDiferenca(dataPublicacao) {
     return stringDiferenca
 }
 
-function adicionarPaginacao(pagina) {
-    let ul = document.querySelector('#paginacao')
+function adicionarPaginacao(pagina, totalDePaginas) {
+    let ul = document.querySelector('#listaDePaginas')
 
     if (ul == null) {
         ul = document.createElement('ul')
-        ul.id = 'paginacao'
-        document.querySelector('footer').appendChild(ul)
+        ul.id = 'listaDePaginas'
+        document.querySelector('#paginacao').appendChild(ul)
     }
 
     let aux = pagina - 5 //
@@ -217,52 +226,58 @@ function adicionarPaginacao(pagina) {
     }
 
     let li = document.createElement('li')
-    let a = document.createElement('a')
+    let button = document.createElement('button')
     if (pagina != 1) {
-        a.addEventListener('click', () => {
-            document.querySelector('ul').remove()
-            document.querySelector('ul').remove()
+        button.addEventListener('click', () => {
             atualizarFiltros(pagina - 1)
         })
     }
-    a.innerText = '<'
-    li.appendChild(a)
+    button.innerText = '<'
+    button.classList.add('setas')
+    li.appendChild(button)
     ul.appendChild(li)
 
-    for (let index = 1; index <= 10; index++) {
+    for (let index = 1; index <= 10 && aux <= totalDePaginas; index++) {
         li = document.createElement('li')
-        a = document.createElement('a')
-        a.innerText = aux
-        if (a.innerText == pagina) {
+        button = document.createElement('button')
+        button.innerText = aux
+        if (button.innerText == pagina) {
             let paginaAtual = document.querySelector('#paginaAtual')
             if(paginaAtual != null){
                 paginaAtual.remove()
             }
-            a.id = 'paginaAtual'
+            button.id = 'paginaAtual'
         }
         aux++
-        if (a.innerText != pagina) {
-            let valorDoMomento = a.innerText
-            a.addEventListener('click', () => {
-                document.querySelector('ul').remove()
-                document.querySelector('ul').remove()
+        if (button.innerText != pagina) {
+            let valorDoMomento = button.innerText
+            button.addEventListener('click', () => {
                 atualizarFiltros(valorDoMomento)
             })
         }
-        li.appendChild(a)
+        li.appendChild(button)
         ul.appendChild(li)
     }
 
     li = document.createElement('li')
-    a = document.createElement('a')
-    a.addEventListener('click', () => {
-        document.querySelector('ul').remove()
-        document.querySelector('ul').remove()
+    button = document.createElement('button')
+    button.addEventListener('click', () => {
         atualizarFiltros(pagina + 1)
     }) 
-    a.innerText = '>'
-    li.appendChild(a)
+    button.innerText = '>'
+    button.classList.add('setas')
+    li.appendChild(button)
     ul.appendChild(li)
+
+    if (totalDePaginas == 1) {
+        document.querySelector('.setas').remove()
+        document.querySelector('.setas').remove()
+    }
+}
+
+function removerListas() {
+    document.querySelector('ul').remove()
+    document.querySelector('ul').remove()
 }
 
 function openDialog() {

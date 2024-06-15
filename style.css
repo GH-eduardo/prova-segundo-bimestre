@@ -1,45 +1,36 @@
 /* Reset de estilos para garantir consistência em diferentes navegadores */
-body,
-h1,
-h2,
-p,
-ul,
-ol,
-li,
-figure,
-table,
-th,
-td {
+body, h1, h2, p, ul, li {
   margin: 0;
   padding: 0;
 }
 
 * {
     font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
 }
 
 body {
     display: grid;
-    grid-template-rows: 1fr auto 1fr;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
 }
 
 header {
-    height: 100%;
-    width: 100%;
+    height: 130px;
     background-color: #4682b4;
     position: relative;
 }
 
 h1 {
-    color: whitesmoke;
+    color: white;
     text-align: center;
-    margin-top: 60px;
+    margin-top: 25px;
 }
 
-header form {
-    width: 100ch;
+#formulárioDeBusca {
+    width: 70%;
+    max-width: 100ch;
     height: 40px;
-    margin: auto;
     position: absolute;
     top: 70%;
     left: 50%;
@@ -51,24 +42,27 @@ header form {
     width: 100%;
     padding: 0;
     border: none;
-    text-align: center;
+    text-indent: 1em;
+    border-radius: 15px;
+    font-size: 1em;
 }
 
-header button {
+#lupa {
     position: absolute;
     top: 0px;
     padding: 0 10px;
     right: 0px;
     height: 100%;
+    border: none;
+    background-color: transparent;
+    font-size: large;
 }
 
 #filtro {
-    width: auto;
-    height: auto;
     color: white;
     position: absolute;
     top: 70%;
-    left: 95%;
+    right: 15px;
     transform: translate(-50%, -50%);
 }
 
@@ -82,20 +76,22 @@ header button {
     background-color: #f0f0f0;
     color: #4682b4;
     border-radius: 50%;
-    width: 9.2px;
+    width: 15.2px;
     text-align: center;
 }
 
-#conteúdo {
+main {
     background-color: #f0f0f0;
-    height: 100%;
+}
+
+#conteúdo {
     width: 100%;
     max-width: 100ch;
     margin: auto;
 }
 
 img {
-    width: 300px;
+    width: 350px;
     margin-right: 15px;
 }
 
@@ -105,11 +101,19 @@ img {
 
 li {
     display: flex;
-    margin: 60px 0;
+    margin: 10px 0;
 }
 
-li button {
+.botaoLeiaMais {
+    background-color: #dbdbdb;
     width: 100%;
+    padding: 5px 0;
+    margin-top: 15px;
+    border-radius: 3px;
+}
+
+hr {
+    border: 1px solid #dbdbdb;
 }
 
 p {
@@ -121,102 +125,179 @@ h2, p {
     width: 100%;
 }
 
+.infoAdicional {
+    display: flex;
+}
+
 .data {
     text-align: right;
 }
 
 #dialog {
-    padding: 35px;
+    width: 500px;
+    border-radius: 10px;
+    padding: 40px;
 }
 
-#dialog input, select {
+#dialog form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.divDialog {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#dialog label {
+    font-size: 1.2em;
+}
+
+.filtros {
+    width: 200px;
+    padding: 0;
+    margin: 0;
+    height: auto;
+    font-size: 1.2em;
     display: block;
-    margin-bottom: 10px;
+    border: 2px solid #dadada;
+    border-radius: 5px;
+    margin-right: 15px;
 }
 
-#applyFiltersButton {
-    margin-top: 30px;
-    color: white;
-    background-color: #4682b4;
-}
-
-#closeButton {
+#dialog #closeButton {
+    width: auto;
+    margin: 0;
     color: red;
     position: absolute;
-    top: 2px;
-    right: 1px;
+    top: 4px;
+    right: 2px;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: large;
+}
+
+#dialog #applyFiltersButton {
+    background-color: #4682b4;
+    color: white;
+    padding: 5px;
+    margin-top: 30px;
+    border: none;
+}
+
+#dialog #resetFiltersButton {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    margin-top: 30px;
+    border: none;
 }
 
 button, svg {
     cursor: pointer;
+    border: none;
+}
+
+#paginacao {
+    height: auto;
+}
+
+#listaDePaginas {
+    display: flex;
+    justify-content: center;
+}
+
+#listaDePaginas button {
+    width: 40px;
+    height: 40px;
+    font-weight: bold;
+    color: #4682b4;
+    border: 2px solid #4682b4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: 0 5px;
+}
+
+#listaDePaginas button:hover, #listaDePaginas #paginaAtual {
+    color: #f0f0f0;
+    background-color: #4682b4;
+}
+
+#listaDePaginas #paginaAtual:hover {
+    color: #4682b4;
+    background-color: #f0f0f0;
 }
 
 footer {
     background-color: #4682b4;
 }
 
-footer ul {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
+footer p {
+    color: white;
+    text-align: center;
+    margin: 40px 0;
 }
 
-footer a {
-    width: 40px;
-    height: 40px;
-    background-color: whitesmoke;
-    border: black 1px solid;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-#paginaAtual {
-    background-color: #4682b4;
-}
-
-footer a:hover, #paginaAtual:hover {
-    background-color: gold;
-}
-
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1000px) {
     img {
-        width: 500px;
+        width: 100%;
     }
 
-    #filtro {
-        /* top: 50%;
-        left: 90%;
-        transform: translate(-50%, -50%); */
+    li {
+        flex-direction: column;
     }
 
-    header form {
+    #conteúdo, #formulárioDeBusca {
         width: 60%;
     }
+
+    li h2 {
+        margin-top: 15px;
+    }
+
+    .introducao {
+        text-indent: 2em;
+    }
 }
 
-@media screen and (max-width: 800px) {
-    img {
-        width: 300px;
+@media screen and (max-width: 760px){
+    #dialog form {
+        grid-template-columns: 1fr;
+    }   
+    .filtros {
+        width: 100%;
     }
+}
+
+@media screen and (max-width: 600px) {
 
     h1 {
-        margin-top: 20px;
+        margin-top: 2px;
     }
 
-    header form {
-        width: 272px;
+    #formulárioDeBusca {
+        top: 75%;
+        width: 75%;
     }
 
     #filtro {
-        /* top: 50%;
-        left: 90%;
-        transform: translate(-50%, -50%); */
+        top: 75%;
     }
 
-    footer a {
-        width: 25px;
-        height: 25px;
+    #conteúdo {
+        width: 90%;
+    }
+
+    #listaDePaginas button {
+        width: 28px;
+        height: 28px;
+        margin: 0 2px;
+    }
+
+    #listaDePaginas .setas {
+        display: none;
     }
 }
