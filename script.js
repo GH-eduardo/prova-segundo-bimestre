@@ -81,7 +81,7 @@ function carregarNoticias() {
     const url = new URL(window.location)
     let queryString = url.search
     console.log(queryString, queryString)
-    let link = 'http://servicodados.ibge.gov.br/api/v3/noticias/'
+    let link = 'https://servicodados.ibge.gov.br/api/v3/noticias/'
 
     fetch(link + queryString)
         .then(response => {
